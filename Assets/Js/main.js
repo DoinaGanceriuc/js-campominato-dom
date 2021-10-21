@@ -28,8 +28,7 @@ Al termine della partita il software deve scoprire tutte le bombe e comunicare i
 */
 
 // inizializzazione delle variabili
-/* const chooseLevel = Number(prompt("Scegli il livello di difficoltà[1/2/3]")) */
-const chooseLevel = 3;
+const chooseLevel = Number(prompt("Scegli il livello di difficoltà[1/2/3]"))
 const levelOne = 1;
 const levelTwo = 2; 
 const levelThree = 3;
@@ -53,7 +52,21 @@ function ciclaElementi(valCiclo) {
 
     // evento sul click
     cellaElement.addEventListener("click", function() {
+    const valoreCella = Number(this.innerText);
     this.style.backgroundColor = "lightBlue";
+    if (listaNumbers.includes(valoreCella)) {
+        console.log("bomba");
+        this.style.backgroundColor = "red";
+        
+    } else {
+        console.log("continua");
+        this.style.backgroundColor = "lightBlue";
+    }
+
+
+
+
+    
     })
 
 
@@ -90,9 +103,10 @@ function pcRandomNumbers(min, max) {
 
 // I numeri nella lista delle bombe non possono essere duplicati.
 const listaNumbers = [];
+let randomNumber
 
 while (listaNumbers.length < 16) {
-    const randomNumber = pcRandomNumbers(1, levelPlay())
+    randomNumber = pcRandomNumbers(1, levelPlay())
     if(!listaNumbers.includes(randomNumber)) {
         listaNumbers.push(randomNumber)
          console.log(randomNumber);

@@ -6,13 +6,9 @@ con difficoltà 3 => tra 1 e 49
 Quando l'utente clicca su ogni cella, la cella cliccata si colora di azzurro.
 
 
-In seguito l'utente clicca su ogni cella:
-se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina,
-altrimenti la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.
-La partita termina quando
-il giocatore clicca su una bomba
-o raggiunge il numero massimo possibile di numeri consentiti.
-Al termine della partita il software deve scoprire tutte le bombe e comunicare il punteggio, cioè il numero di volte che l’utente ha inserito un numero consentito.
+
+
+
 
 
 */
@@ -41,22 +37,35 @@ const containerElement = document.querySelector(".container");
  * Questa funzione cicla una serie di elementi in base al valore che riceve in ingresso
  * @param {number} valCiclo - indica il valore da ricevere in input
  */
+let cellaElement;
+let eventoClick = false;
 function ciclaElementi(valCiclo) {
 
     //ciclo for
     for (let i = 1; i <= valCiclo; i++) { 
-    let cellaElement = document.createElement("div");
+    cellaElement = document.createElement("div");
     cellaElement.className = "cella";
     cellaElement.innerHTML = i;
     containerElement.insertAdjacentElement("beforeend", cellaElement)
 
     // evento sul click
-    cellaElement.addEventListener("click", function() {
+    cellaElement.addEventListener("click",addListen)
+
+
+}  
+}
+function addListen() {
+
+/* In seguito l'utente clicca su ogni cella:
+se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina,
+altrimenti la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.   */      
     const valoreCella = Number(this.innerText);
     this.style.backgroundColor = "lightBlue";
     if (listaNumbers.includes(valoreCella)) {
         console.log("bomba");
         this.style.backgroundColor = "red";
+        eventoClick = true;
+        console.log(eventoClick);
         
     } else {
         console.log("continua");
@@ -67,11 +76,7 @@ function ciclaElementi(valCiclo) {
 
 
     
-    })
-
-
-}  
-}
+    }
 
 // Invocare una funzione
 ciclaElementi(levelPlay());
@@ -113,3 +118,24 @@ while (listaNumbers.length < 16) {
     }
 }
 console.log(listaNumbers);
+
+/* La partita termina quando
+il giocatore clicca su una bomba
+o raggiunge il numero massimo possibile di numeri consentiti.
+Al termine della partita il software deve scoprire tutte le bombe e comunicare il punteggio, cioè il numero di volte che l’utente ha inserito un numero consentito (16).
+*/
+
+// se hai cliccato sulla bomba hai perso
+// se hai cliccato per 16 volte e non hai mai preso una bomba hai vinto
+// fai vedere tutti i numeri dell'array al termine
+
+
+if (eventoClick == true) {
+    console.log("qualcosa");
+  /*  console.log(cellaElement.removeEventListener("click", addListen));  */
+
+
+    
+}
+
+

@@ -4,13 +4,9 @@ con difficoltà 1 => tra 1 e 100
 con difficoltà 2 => tra 1 e 81
 con difficoltà 3 => tra 1 e 49
 Quando l'utente clicca su ogni cella, la cella cliccata si colora di azzurro.
-
-
-
-
-
-
-
+In seguito l'utente clicca su ogni cella:
+se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina,
+altrimenti la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.
 */
 
 
@@ -28,6 +24,11 @@ const chooseLevel = Number(prompt("Scegli il livello di difficoltà[1/2/3]"))
 const levelOne = 1;
 const levelTwo = 2; 
 const levelThree = 3;
+const livelloDifficolta = levelPlay();
+const bombs = getPcListRandomNumbers(livelloDifficolta)
+console.log(bombs);
+let contatore = 0;
+const chanceToWin = levelPlay() - bombs.length;
 
 // selezionare elementi DOM
 const containerElement = document.querySelector(".container");
@@ -39,54 +40,25 @@ const singolaCellaElement = document.getElementsByClassName("cella")
  * Questa funzione cicla una serie di elementi in base al valore che riceve in ingresso
  * @param {number} valCiclo - indica il valore da ricevere in input
  */
-let eventoClick = false;
+
+
 function ciclaElementi(valCiclo) {
 
     //ciclo for
     for (let i = 1; i <= valCiclo; i++) { 
     let cellaElement = document.createElement("div");
-    cellaElement.append(i)
+    cellaElement.append(i);
     cellaElement.classList.add("cella");
     containerElement.append(cellaElement);
-    /* console.log(cellaElement); */
-
-    // evento sul click
-    cellaElement.addEventListener("click",function () {
-    const valoreCella = Number(this.innerText);
-    /* this.style.backgroundColor = "blue"; */
-  if (bombs.includes(valoreCella)) {
-        console.log("bomba");
-        this.style.backgroundColor = "red";
-        alert("hai perso")
-        eventoClick = true;
-        console.log(eventoClick);
-        
-    } else {
-        console.log("continua");
-        this.style.backgroundColor = "lightBlue";
-    }
-
-    })
 
 
-
+    cellaElement.addEventListener("click", aggiungiClick)
+    
+    
 
 
 }  
 }
-
-
-/* In seguito l'utente clicca su ogni cella:
-se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina,
-altrimenti la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.   */      
-   
-
-/*     if (eventoClick == true) {
-    console.log(cellaElement.removeEventListener("click", addListen));;
-} */
-
-
-// Invocare una funzione
 ciclaElementi(levelPlay());
 
 /**
@@ -103,9 +75,6 @@ function levelPlay() {
         return 49
     }
 }
-// Invocare una funzione
-const livelloDifficolta = levelPlay();
-/* console.log(livelloDifficolta); */
 
 /* Il computer deve generare 16 numeri casuali nello stesso range della difficoltà prescelta: le bombe.
 */
@@ -124,77 +93,92 @@ function getPcListRandomNumbers(range) {
     const randomNumber = pcRandomNumbers(1, range)
     if(!listaNumbers.includes(randomNumber)) {
         listaNumbers.push(randomNumber)
-         console.log(randomNumber);
+         /* console.log(randomNumber); */
     }
 }
 return listaNumbers;
 }
-
-const bombs = getPcListRandomNumbers(livelloDifficolta)
 
 
 
 /* La partita termina quando
 il giocatore clicca su una bomba
 o raggiunge il numero massimo possibile di numeri consentiti.
-Al termine della partita il software deve scoprire tutte le bombe e comunicare il punteggio, cioè il numero di volte che l’utente ha inserito un numero consentito (16).
+Al termine della partita il software deve scoprire tutte le bombe e comunicare il punteggio, cioè il numero di volte che l’utente ha inserito un numero consentito ().
 */
 
 
-/* function removeClick () {
-
-   cellaElement.removeEventListener("click", addListen);
-
-}
-
-
-removeClick()
- */
-
 // ciclare tra le celle
 
-function coloraCelle()  {
-    for (let index = 0; index < singolaCellaElement
+function ciclaCelle(){
+     for (let index = 0; index < singolaCellaElement
     .length; index++) {
     let singolaCella = singolaCellaElement[index];
-    console.log(singolaCella);
+    /* console.log(singolaCella); */ //div di tutte le celle che devono essere colorate
     let numeroCella = parseInt(singolaCella.textContent);
-    console.log(numeroCella);
+    /* console.log(numeroCella); */ // numero tutte le celle da 1 a 49
+    
+    coloraCelle(numeroCella, singolaCella)
+    rimuoviClick(singolaCella, aggiungiClick)
+    // singolaCella.removeEventListener("click", aggiungiClick)
+}
+}
 
-     
-       /*   verifyBomb(numeroCella) */
-     if (bombs.includes(numeroCella)) {
-        singolaCella.style.backgroundColor = "red";
-        return singolaCella
+function aggiungiClick() {
+    const valoreCella = Number(this.innerText);
+    //console.log(valoreCella);
+    this.style.backgroundColor = "lightBlue";
+    contatore = contatore + 1;
+    //console.log("hai cliccato sul blu: " + contatore);
+    if (verifyBomb(valoreCella)) {
+        console.log("bomba");
+        /* alert("Hai  ") */
+        document.getElementById("result").innerHTML = `Hai perso! Hai cliccato solo ${Number(contatore-1)} numeri consentiti rispetto ai ${chanceToWin} previsti`
+        /* console.log("hai cliccato sul blu fino alla bomba x n: " + Number(contatore-1)); */
+        this.style.backgroundColor = "red";
+         ciclaCelle()
+    } else {
+        console.log("continua");
+        vittoria();
     }
-}
-    
 
-/*  coloraCelle()   */
-   if (eventoClick == true) {
-       coloraCelle()
-   }
+    }
 
-
-    
-    // element.addEventListener("click", handleClick() 
-        // prendere il contenuto della cella
-       /*  const cellNumber = parseInt(this.innerText)
-        console.log(cellNumber);
-        is_a_bomb(cellNumber, bombs) */
-
-    //)
-
-}
 
 function verifyBomb(valoreCella){
 
     if (bombs.includes(valoreCella)) {
-        console.log("bomba");
-        /* valoreCella.classList.add() = "red"; */
-        
-    } else {
-        console.log("continua");
-        /* valoreCella.classList.add() = "blue"; */
+       return true
+    } 
+    return false
+}
+
+
+
+
+function coloraCelle(numeroDellaCella, tutteLeCelle) {
+    
+        if (bombs.includes(numeroDellaCella)) {
+
+           return tutteLeCelle.style.backgroundColor = "red"
     }
+    return false
+}
+ 
+/* per vincere:
+- clicca fino a n volte senza prendere una bomba
+- mostrare il numero delle volte cliccate
+*/
+
+
+function vittoria(){
+    if (contatore == chanceToWin){
+        document.getElementById("result").innerHTML = `HAI VINTO!!! Hai cliccato per ${contatore} volte`
+        ciclaCelle()
+    }
+}
+
+function rimuoviClick(tutteCelle, funzioneDaPassare){
+    tutteCelle.removeEventListener("click", funzioneDaPassare)
+
 }

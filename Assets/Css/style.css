@@ -6,6 +6,9 @@
 body {
   background-color: bisque;
 }
+#result {
+  text-align: center;
+}
 
 .container {
   max-width: 1000px;
